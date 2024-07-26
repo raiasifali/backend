@@ -1,10 +1,9 @@
-//imports
+// imports
 const express = require("express");
-const app = express();
 const bodyParser = require("body-parser");
-const connection = require("./connection/connection");
 const cors = require("cors");
 require("dotenv").config();
+const connection = require("./connection/connection");
 const authRoutes = require("./routes/auth/auth");
 const profileRoutes = require("./routes/profile/profile");
 const newsFeedRoutes = require("./routes/news feed/newsFeed");
@@ -19,46 +18,21 @@ const aboutusroutes = require("./routes/aboutus");
 const notifications = require("./routes/notification/notification");
 const favouriteplayer = require("./routes/favourite player/favouritePlayer");
 
-//middlewares
-// app.use(cors())
-app.use(
-  cors({
-    origin: ["*", "https://frontend-flax-pi-43.vercel.app"],
-    credentials: true,
-    methods: ["POST", "GET", "DELETE", "UPDATE", "PUT", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    optionsSuccessStatus: 200,
-  })
-);
-app.options(
-  "*",
-  cors({
-    origin: "*",
-    credentials: true,
-    methods: ["POST", "GET", "DELETE", "UPDATE"],
-    optionSuccessStatus: 200,
-  })
-);
+// initialize app
+const app = express();
 
-// app.use((req, res, next) => {
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-//     res.setHeader('Access-Control-Allow-Credentials', true);
-//     next();
-// });
+// CORS configuration
+const corsOptions = {
+  origin: "https://frontend-flax-pi-43.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
-  next();
-});
-
-// app.use(express.json({
-//     verify: (req, res, buffer) => req['rawBody'] = buffer,
-//   }));
-
+// body-parser configuration
 app.use(
   bodyParser.json({
     verify: (req, res, buffer) => {
@@ -67,18 +41,13 @@ app.use(
   })
 );
 
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
+app.use(express.urlencoded({ extended: true }));
 
-//routes
+// routes
 app.get("/", (req, res) => {
-  return res.status(200).json({
-    message: "SUCCESS",
-  });
+  res.status(200).json({ message: "SUCCESS" });
 });
+
 app.use(authRoutes);
 app.use(profileRoutes);
 app.use(newsFeedRoutes);
@@ -93,10 +62,16 @@ app.use(aboutusroutes);
 app.use(notifications);
 app.use(favouriteplayer);
 
-//mongodb connection
+// error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
+
+// mongodb connection
 connection;
 
-//server
+// start server
 app.listen(process.env.PORT, () => {
-  console.log(`Listening to port ${process.env.PORT}`);
+  console.log(`Listening on port ${process.env.PORT}`);
 });
