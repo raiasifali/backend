@@ -17,15 +17,9 @@ const aboutusroutes = require("./routes/aboutus");
 const notifications = require("./routes/notification/notification");
 const favouriteplayer = require("./routes/favourite player/favouritePlayer");
 
-// initialize app
-const app = express();
-const allowedOrigins = [
-  "https://frontend-flax-pi-43.vercel.app",
-  "https://undiscovered-wqvo.vercel.app",
-];
 // CORS configuration
 const corsOptions = {
-  origin: allowedOrigins,
+  origin: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
