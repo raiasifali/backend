@@ -1,4 +1,3 @@
-// imports
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -20,16 +19,25 @@ const favouriteplayer = require("./routes/favourite player/favouritePlayer");
 
 // initialize app
 const app = express();
-
+const allowedOrigins = [
+  "https://frontend-flax-pi-43.vercel.app",
+  "https://undiscovered-wqvo.vercel.app",
+];
 // CORS configuration
 const corsOptions = {
-  origin: "https://frontend-flax-pi-43.vercel.app",
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 };
-
-app.use(cors(corsOptions));
+//undiscovered-wqvo.vercel.app/login
+https: app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
 // body-parser configuration
