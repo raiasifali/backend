@@ -1,36 +1,45 @@
 //imports
-const express = require('express');
+const express = require("express");
 const app = express();
-const bodyParser = require('body-parser');
-const connection = require('./connection/connection');
-const cors = require('cors');
-require('dotenv').config();
-const authRoutes = require('./routes/auth/auth');
-const profileRoutes = require('./routes/profile/profile');
-const newsFeedRoutes = require('./routes/news feed/newsFeed');
-const videoRoutes = require('./routes/video/video');
-const subscriptionRoutes = require('./routes/subscriptions/subscriptions');
-const coachRoutes = require('./routes/coach/coach');
-const coachProfileRoutes = require('./routes/coach profile/coachProfile');
-const avalabilityPlayers = require('./routes/avalability players/avalabilityPlayers');
-const adminroutes = require('./routes/admin/admin');
-const testimonialroutes = require('./routes/testimonial/testimonial');
-const aboutusroutes = require('./routes/aboutus');
-const notifications = require('./routes/notification/notification');
-const favouriteplayer = require('./routes/favourite player/favouritePlayer');
+const bodyParser = require("body-parser");
+const connection = require("./connection/connection");
+const cors = require("cors");
+require("dotenv").config();
+const authRoutes = require("./routes/auth/auth");
+const profileRoutes = require("./routes/profile/profile");
+const newsFeedRoutes = require("./routes/news feed/newsFeed");
+const videoRoutes = require("./routes/video/video");
+const subscriptionRoutes = require("./routes/subscriptions/subscriptions");
+const coachRoutes = require("./routes/coach/coach");
+const coachProfileRoutes = require("./routes/coach profile/coachProfile");
+const avalabilityPlayers = require("./routes/avalability players/avalabilityPlayers");
+const adminroutes = require("./routes/admin/admin");
+const testimonialroutes = require("./routes/testimonial/testimonial");
+const aboutusroutes = require("./routes/aboutus");
+const notifications = require("./routes/notification/notification");
+const favouriteplayer = require("./routes/favourite player/favouritePlayer");
 
 //middlewares
 // app.use(cors())
-app.use(cors());
-app.options(
-  '*',
+app.use(
   cors({
-    origin: '*',
+    origin: ["*", "https://frontend-flax-pi-43.vercel.app"],
     credentials: true,
-    methods: ['POST', 'GET', 'DELETE', 'UPDATE'],
+    methods: ["POST", "GET", "DELETE", "UPDATE", "PUT", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 200,
+  })
+);
+app.options(
+  "*",
+  cors({
+    origin: "*",
+    credentials: true,
+    methods: ["POST", "GET", "DELETE", "UPDATE"],
     optionSuccessStatus: 200,
   })
 );
+
 // app.use((req, res, next) => {
 //     res.setHeader('Access-Control-Allow-Origin', '*');
 //     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
@@ -40,8 +49,8 @@ app.options(
 // });
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 
   next();
 });
@@ -65,9 +74,9 @@ app.use(
 );
 
 //routes
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   return res.status(200).json({
-    message: 'SUCCESS',
+    message: "SUCCESS",
   });
 });
 app.use(authRoutes);
